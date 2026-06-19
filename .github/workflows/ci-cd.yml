@@ -1,0 +1,42 @@
+name: DevOps CI-CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-and-quality:
+    name: Pruebas y Control de Calidad Estricto
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar Código del Repositorio
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 
+
+      - name: Configurar Entorno de Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Instalar Dependencias del Microservicio
+        run: npm install
+
+      - name: Ejecutar Pruebas Unitarias y Cobertura
+        run: npm test 
+
+      - name: Escaneo de Cumplimiento Normativo con SonarQube
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+      - name: Verificación del Quality Gate
+        uses: sonarsource/sonarqube-quality-gate-action@master
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
