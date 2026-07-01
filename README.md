@@ -10,4 +10,4 @@ Para este proyecto se implementó una estrategia de control de versiones basada 
 Se utiliza la especificación de *Conventional Commits* para facilitar la auditoría automatizada y el versionado:
 * `feat:` para nuevas características.
 * `fix:` para la resolución de errores o bugs.
-* `docs:` para cambios en la documentación técnica.
+* `docs:` para cambios en la documentación técnica. 
